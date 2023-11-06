@@ -1,13 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
+require('dotenv').config();
 const bookRoutes = require('./routes/book');
 const userRoutes = require('./routes/user');
 const path = require('path');
 
 
-mongoose.connect('mongodb+srv://cronosu:6aCPegcnUMd7YpSe@cluster0.few5crd.mongodb.net/',
+mongoose.connect(process.env.DB_URL,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true

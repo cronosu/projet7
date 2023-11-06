@@ -1,5 +1,6 @@
 const multer = require('multer');
-
+const sharp = require('sharp');
+const path = "";
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
@@ -13,8 +14,19 @@ const storage = multer.diskStorage({
   filename: (req, file, callback) => {
     const name = file.originalname.split(' ').join('_');
     const extension = MIME_TYPES[file.mimetype];
-    callback(null, name + Date.now() + '.' + extension);
+    if (!extension) {
+      return callback(new Error('Format de fichier non pris en charge'), null);
+    }
+    const path = name + Date.now() + '.' + extension;   
+    callback(null, path);
   }
 });
 
-module.exports = multer({storage: storage}).single('image');
+const upload = multer({ storage: storage }).single('image');
+
+module.exports = (req, res, next) => {
+  upload(req, res, function (err) {
+    
+    next();
+  });
+};

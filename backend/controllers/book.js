@@ -20,9 +20,23 @@ exports.createBook = (req, res, next) => {
 
 
 exports.modifyBook = (req, res, next) => {
+  Book.findOne({ _id: req.params.id })
+    .then((book) => {
+      const imageUrl = book.imageUrl;
+      const startIndex = imageUrl.indexOf("images/"); 
+      const fileName = imageUrl.substring(startIndex);
+        if (req.file) {
+          fs.unlink(`${fileName}`, (err) => {
+            if (err) {
+            return res.status(404).json({ error: "Erreur lors de la suppression du fichier" });
+          }
+        }); 
+      } 
+    })
+
   const bookObject = req.file ? {
     ...JSON.parse(req.body.book),
-    imageUrl: `${req.protocol}://${req.get('host')}/image/${req.file.filename}`
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   } : { ...req.body };
   delete bookObject._userId;
   Book.findOne({ _id: req.params.id })
