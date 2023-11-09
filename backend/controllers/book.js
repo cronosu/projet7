@@ -1,16 +1,11 @@
 const Book = require('../models/Book');
 const fs = require('fs')
 
-
 exports.createBook = (req, res, next) => {
   const bookObject = JSON.parse(req.body.book);
-
   delete bookObject._userId;
-
   const book = new Book({
-
     ...bookObject,
-
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   });
   book.save()
@@ -120,15 +115,13 @@ exports.getbestRatingBooks = (req, res, next) => {
     });
 };
 
-
 exports.addRatingBook = (req, res, next) => {
-
   Book.findOne({ _id: req.params.id })
     .then(book => {
       if (book.ratings.some(rating => rating.userId === req.params.id)) {
         return res.status(401).json({ message: 'Vote deja pris en compte' });
       };
-
+      
       const rating = book.ratings;
       rating.push({
         userId: req.body.userId,
