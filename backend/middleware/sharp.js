@@ -3,7 +3,8 @@ const path = require('path');
 const fs = require('fs')
 
 module.exports = (req, res, next) => {
-    if (req.file.size > 300) {
+    const tailleLimiteEnKo = 300;
+    if (req.file && req.file.size > tailleLimiteEnKo * 1024) {
         const imageOriginalPath = req.file.path;
         const imageDirectory = path.dirname(imageOriginalPath);
         const imageExtension = path.extname(imageOriginalPath);
