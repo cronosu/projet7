@@ -10,7 +10,7 @@ exports.createBook = (req, res, next) => {
   });
   book.save()
     .then(() => { res.status(201).json({ message: 'Livre enregistré !' }) })
-    .catch(error => { res.status(400).json({ error }) })
+    .catch(error => { res.status(500).json({ error }) })
 };
 
 
@@ -37,11 +37,11 @@ exports.modifyBook = (req, res, next) => {
   Book.findOne({ _id: req.params.id })
     .then((book) => {
       if (book.userId != req.auth.userId) {
-        res.status(401).json({ message: "Non-autorisé" })
+        res.status(403).json({ message: "unauthorized request" })
       } else {
         Book.updateOne({ _id: req.params.id }, { ...bookObject, _id: req.params.id })
           .then(() => { res.status(200).json({ message: "Livre modifié" }) })
-          .catch(error => { res.status(401).json({ error }) })
+          .catch(error => { res.status(500).json({ error }) })
       }
     })
     .catch((error) => { res.status(400).json({ error }) })
@@ -61,7 +61,7 @@ exports.deleteBook = (req, res, next) => {
               res.status(200).json({ message: "Livre supprimé !" })
             }
             ).catch(error =>
-              res.status(401).json({ error }));
+              res.status(500).json({ error }));
         });
       }
     }).catch(
@@ -79,7 +79,7 @@ exports.getOneBook = (req, res, next) => {
   ).catch(
     (error) => {
       res.status(404).json({
-        error: error
+        error
       });
     }
   );
@@ -93,7 +93,7 @@ exports.getAllBooks = (req, res, next) => {
     }
   ).catch(
     (error) => {
-      res.status(400).json({
+      res.status(404).json({
         error
       });
     }
@@ -109,7 +109,7 @@ exports.getbestRatingBooks = (req, res, next) => {
       res.status(200).json(bestRatedBooks);
     })
     .catch((error) => {
-      res.status(400).json({
+      res.status(404).json({
         error
       });
     });
@@ -138,10 +138,10 @@ exports.addRatingBook = (req, res, next) => {
           res.status(201).json(book);
         })
         .catch(error => {
-          res.status(400).json({ error: error.message });
+          res.status(500).json({ error: error.message });
         });
     })
     .catch(error => {
-      res.status(400).json({ error: error.message });
+      res.status(500).json({ error: error.message });
     });
 };

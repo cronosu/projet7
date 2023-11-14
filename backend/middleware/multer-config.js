@@ -26,7 +26,7 @@ const upload = multer({ storage: storage }).single('image');
 module.exports = (req, res, next) => {
   upload(req, res, (err) =>{
     if (err) {
-      return res.status(400).json({ error: err.message });
+      return res.status(500).json({ error: err.message });
     }
     next();
   }); 

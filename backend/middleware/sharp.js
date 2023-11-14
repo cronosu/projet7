@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
             .resize(600,null,{
                 fit:"inside" 
             }).jpeg({quality:80})
-            .toFile(imageResizedPath, (err, info) => {
+            .toFile(imageResizedPath, (err) => {
                 if (err) {
                     console.error('Erreur lors du redimensionnement de l\'image :', err);
                     return res.status(500).json({ error: 'Erreur lors du redimensionnement de l\'image' });
